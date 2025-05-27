@@ -25,7 +25,7 @@ class WebRTCP2P {
     this.onFileCallback = null;
     this.onConnectionCallback = null;
     this.onErrorCallback = null;
-    
+    this.remoteCandidatesBuffer = [];
     // Firebase listeners untuk cleanup
     this.firebaseListeners = [];
     
@@ -135,7 +135,7 @@ class WebRTCP2P {
       
       // Set remote description
       await this.localConnection.setRemoteDescription(new RTCSessionDescription(offerData));
-      
+      await this._processBufferedCandidates();
       // Create answer
       const answer = await this.localConnection.createAnswer();
       await this.localConnection.setLocalDescription(answer);
@@ -489,6 +489,7 @@ class WebRTCP2P {
         if (answerData && this.localConnection && this.localConnection.signalingState !== 'stable') {
           try {
             await this.localConnection.setRemoteDescription(new RTCSessionDescription(answerData));
+            await this._processBufferedCandidates();
             console.log('Remote description set from answer');
           } catch (error) {
             console.error('Error setting remote description:', error);
@@ -504,30 +505,52 @@ class WebRTCP2P {
       const candidates = snapshot.val();
       if (candidates) {
         for (const [key, candidateData] of Object.entries(candidates)) {
-          // Hanya proses candidate dari peer lain
           const isFromOtherPeer = this.isInitiator ? 
             candidateData.from === 'caller' : 
             candidateData.from === 'initiator';
-          
+
           if (isFromOtherPeer) {
             const candidate = new RTCIceCandidate({
               candidate: candidateData.candidate,
               sdpMid: candidateData.sdpMid,
               sdpMLineIndex: candidateData.sdpMLineIndex
             });
-            
+
             try {
-              if (this.localConnection) {
+              if (this.localConnection && this.localConnection.remoteDescription) {
+                // Jika remote description sudah ada, langsung tambahkan
                 await this.localConnection.addIceCandidate(candidate);
+              } else {
+                // Jika belum, simpan di buffer
+                console.log('Buffering ICE candidate...');
+                this.remoteCandidatesBuffer.push(candidate);
               }
             } catch (error) {
-              console.error('Error adding ICE candidate:', error);
+              // Log error, tapi jangan hentikan proses jika hanya buffer
+              if (this.localConnection && this.localConnection.remoteDescription) {
+                  console.error('Error adding ICE candidate:', error);
+              }
             }
           }
         }
       }
     });
     this.firebaseListeners.push({ ref: candidatesRef, listener: candidatesListener });
+  }
+
+  async _processBufferedCandidates() {
+    console.log(`Processing ${this.remoteCandidatesBuffer.length} buffered candidates.`);
+    while (this.remoteCandidatesBuffer.length > 0) {
+        const candidate = this.remoteCandidatesBuffer.shift(); // Ambil dari depan
+        try {
+            if (this.localConnection) {
+                await this.localConnection.addIceCandidate(candidate);
+                console.log('Added buffered candidate.');
+            }
+        } catch (error) {
+            console.error('Error adding buffered ICE candidate:', error);
+        }
+    }
   }
 
   _cleanupFirebaseListeners() {
