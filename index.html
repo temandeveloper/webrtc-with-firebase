@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/images/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="/styles/output.css" rel="stylesheet">
+  <link href="/styles/mystyle.css" rel="stylesheet">
+  <title>WebRTC Lab</title>
+</head>
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
+
+<body class="scroll-smooth">
+  <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
+    <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Web RTC Lab</h2>
+        <p class="mt-6 text-center text-gray-500 dark:text-gray-400 sm:mt-8 lg:text-left">
+          this is a demo page for WebRTC Lab. The payment form is not functional and is only for demonstration purposes.
+        </p>
+        <div class="mt-6 sm:mt-8 lg:flex lg:items-start lg:gap-12">
+          <form action="#"
+            class="w-full rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6 lg:max-w-xl lg:p-8">
+            <div class="mb-6 grid grid-cols-2 gap-4">
+              <div class="col-span-2 sm:col-span-1">
+                <label for="partnerid" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Partner
+                  Remote ID</label>
+                <input type="text" id="partnerid"
+                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                  placeholder="Input Your Partner Remote ID" required />
+              </div>
+              <div class="col-span-2 sm:col-span-1">
+                <label for="card-number-input" class="mb-4 block text-sm font-medium text-gray-900 dark:text-white">
+                  Status : </label>
+                <span
+                  class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                  <span class="w-2 h-2 me-1 bg-red-500 rounded-full"></span>
+                  Disconnected
+                </span>
+                <span
+                  class="hidden items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                  <span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                  Connected
+                </span>
+
+
+              </div>
+            </div>
+
+            <button id="connect-button" type="button"
+              class="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Connect
+              now</button>
+          </form>
+
+          <div class="mt-6 grow sm:mt-8 lg:mt-0">
+            <div
+              class="space-y-4 rounded-lg border border-gray-100 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800">
+              <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
+                <dt class="text-base font-bold text-gray-900 dark:text-white">Your Remote ID :</dt>
+                <dd class="text-base font-bold text-gray-900 dark:text-white" id="room-id">-</dd>
+              </dl>
+            </div>
+            <button id="create-room" type="button"
+              class="mt-6 flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create
+              Room</button>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="mx-auto max-w-5xl mt-6">
+        <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+          <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
+            <textarea id="text-msg" rows="4"
+              class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+              placeholder="Write a Message..."></textarea>
+          </div>
+          <div class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600 border-gray-200">
+            <button id="send-msg"
+              class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+              Send Message
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+  <script type="module" src="/index.js"></script>
+</body>
+
+</html>

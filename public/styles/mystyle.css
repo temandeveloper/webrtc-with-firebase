@@ -1,0 +1,32 @@
+
+
+@font-face {
+    font-family: titleFont;
+    src: url(font-title.ttf);
+}
+
+@font-face {
+    font-family: msuighub;
+    src: url(msuighub.ttf);
+}
+
+
+@font-face {
+    font-family: msuighur;
+    src: url(msuighur.ttf);
+}
+
+
+.font-arab-title {
+    font-family: titleFont;
+}
+
+.font-arab-1 {
+    font-family: msuighub;
+    font-size: 1.6rem;
+}
+
+.font-arab-2 {
+    font-family: msuighur;
+    font-size: 1.6rem;
+}
